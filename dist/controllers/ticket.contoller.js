@@ -41,15 +41,14 @@ class ticketController extends controller_1.default {
     }
     initialRoutes() {
         this.router.post('/', this.createTicket);
+        this.router.put('/', this.updateTicket);
         this.router.get('/', this.getAllTicket);
     }
     createTicket(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 let validReq = validation.newTicket(req.body);
-                let newTicket = new ticket_model_1.default(validReq);
-                console.log(typeof newTicket);
-                newTicket = yield newTicket.save();
+                let newTicket = yield (new ticket_model_1.default(validReq)).save();
                 res.send(newTicket);
             }
             catch (err) {
@@ -57,6 +56,20 @@ class ticketController extends controller_1.default {
             }
         });
     }
+    updateTicket(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let validReq = validation.updateTicket(req.body);
+                yield ticket_model_1.default.findOneAndUpdate({ _id: validReq.id }, validReq);
+                res.json(validReq);
+            }
+            catch (err) {
+                res.status(400).json({ error: err });
+            }
+        });
+    }
+    /* await Item.findOneAndUpdate({ _id: req.params.id }, reqBody);
+       res.status(200).json({"result" : `Update Successfully \n${JSON.stringify(reqBody)}\n`}) */
     getAllTicket(req, res) {
         res.send('Hello World !');
     }

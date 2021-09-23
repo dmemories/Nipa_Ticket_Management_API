@@ -3,14 +3,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.newTicket = void 0;
+exports.updateTicket = exports.newTicket = void 0;
 const joi_1 = __importDefault(require("joi"));
 const newTicket = (reqBody) => {
     const joiObj = joi_1.default.object({
-        information: joi_1.default.string().min(2).max(40).required(),
-        title: joi_1.default.string().min(2).max(40).required(),
-        description: joi_1.default.string().min(4).max(100).required(),
-        contact_information: joi_1.default.string().min(4).max(100).required(),
+        information: joi_1.default.string().min(1).max(40).required(),
+        title: joi_1.default.string().min(1).max(40).required(),
+        description: joi_1.default.string().min(1).max(100).required(),
+        contact_information: joi_1.default.string().min(1).max(100).required(),
     });
     const { error } = joiObj.validate(reqBody);
     if (error)
@@ -18,3 +18,18 @@ const newTicket = (reqBody) => {
     return reqBody;
 };
 exports.newTicket = newTicket;
+const updateTicket = (reqBody) => {
+    const joiObj = joi_1.default.object({
+        id: joi_1.default.string().min(1).max(40).required(),
+        information: joi_1.default.string().min(1).max(40),
+        title: joi_1.default.string().min(1).max(40),
+        description: joi_1.default.string().min(1).max(100),
+        contact_information: joi_1.default.string().min(1).max(100),
+        status: joi_1.default.string().min(1).max(10).required()
+    });
+    const { error } = joiObj.validate(reqBody);
+    if (error)
+        throw error.details[0].message;
+    return reqBody;
+};
+exports.updateTicket = updateTicket;
