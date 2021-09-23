@@ -29,7 +29,13 @@ const updateTicket = (reqBody: any): object => {
     return reqBody;
 }
 
+const getTicketStatus = (reqStatus: string): object => {
+    if (!ticketStatusArr.includes(reqStatus)) throw `Unknown status (${reqStatus})`;
+    return { status: reqStatus };
+}
+
 export {
     newTicket,
-    updateTicket
+    updateTicket,
+    getTicketStatus
 }

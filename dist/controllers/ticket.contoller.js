@@ -42,7 +42,7 @@ class ticketController extends controller_1.default {
     initialRoutes() {
         this.router.post('/', this.createTicket);
         this.router.put('/', this.updateTicket);
-        this.router.get('/', this.getAllTicket);
+        this.router.get('/', this.getTicket);
     }
     createTicket(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
@@ -68,10 +68,26 @@ class ticketController extends controller_1.default {
             }
         });
     }
-    /* await Item.findOneAndUpdate({ _id: req.params.id }, reqBody);
-       res.status(200).json({"result" : `Update Successfully \n${JSON.stringify(reqBody)}\n`}) */
-    getAllTicket(req, res) {
-        res.send('Hello World !');
+    getTicket(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                let result;
+                if (req.body.status) {
+                    let status = validation.getTicketStatus(req.body.status);
+                    result = yield ticket_model_1.default.find(status).sort({ lastupdate_timestamp: 'desc' });
+                }
+                else {
+                    result = yield ticket_model_1.default.find().sort({
+                        status: 'desc',
+                        lastupdate_timestamp: 'desc'
+                    });
+                }
+                res.json(result);
+            }
+            catch (err) {
+                res.status(400).json({ error: err });
+            }
+        });
     }
 }
 exports.default = ticketController;
